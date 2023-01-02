@@ -1,0 +1,20 @@
+PREDEF:
+  # はじめに
+  - preface.re
+
+CHAPS:
+
+  # 本文
+  - test1.re
+  - test.re
+
+APPENDIX:
+
+  # 何かあれば
+
+POSTDEF:
+  # あとがき
+  - postscript.re
+
+  # 執筆者一覧
+  - contributors.re
