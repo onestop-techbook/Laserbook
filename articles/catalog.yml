@@ -5,6 +5,7 @@ PREDEF:
 CHAPS:
 
   # 本文
+  - chap-1-aboutlaser.re
   - test1.re
   - test.re
 

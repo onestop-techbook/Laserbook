@@ -17,6 +17,15 @@ build-in-docker.batを叩く。
 ### 数式対応
 数式の採番がされなかったので、review-ext.rb作って、数式採番するようにした。
 
+### 上付き文字・下つき文字
+Cr@<sup>{3+}
+
+log@<sub>{2}(1000)
+
+ありがたい！
+
+http://my-web-site.iobb.net/~yuki/2018-07/e-book/review-sup-sub/
+
 ### 権利
 
 ベースには、[TechBooster/ReVIEW\-Template: TechBoosterで利用しているRe:VIEWのテンプレート（B5/A5/電子書籍）](https://github.com/TechBooster/ReVIEW-Template) を使っています。
