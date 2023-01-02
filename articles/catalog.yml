@@ -5,9 +5,9 @@ PREDEF:
 CHAPS:
 
   # 本文
-  - chap-1-aboutlaser.re
-  - test1.re
-  - test.re
+  - chap1.re
+  # - test1.re
+  # - test.re
 
 APPENDIX:
 
