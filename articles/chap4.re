@@ -82,9 +82,10 @@ C:\Program  Files\CONTEC\API-PAC(W32)\AIOWDM\Sample\VbNet\Ao\SingleAo
 //listnum[init][ボードの初期化]{
 Devicename = ”AIO000” ’DeviceName Ret = AioInit(Devicename, Id) ’Init
 Ret = AioResetDevice(Id) ’Reset device
-Ret = AioSetAoRangeAll(Id, 0) ’Set Output Range AoChannels = 2 ’Output channel = 2 (XY)
+Ret = AioSetAoRangeAll(Id, 0) ’Set Output Range AoChannels = 2 (XY)
 Ret = AioSetAoChannels(Id, AoChannels) ’Set Output Channels
-Ret = AioSetAoSamplingClock(Id, 1000) ’Samplimg Clock=1000usec Ret = AioResetAoMemory(Id) ’Reset memory
+Ret = AioSetAoSamplingClock(Id, 1000) ’Samplimg Clock=1000usec 
+Ret = AioResetAoMemory(Id) ’Reset memory
 tbStatus.Text = ”Init Finish” ’Init Finish
 //}
 
@@ -122,7 +123,9 @@ AoData(2000) という一次元配列を確保し、データを格納する。 
 データは、サンプリング 1 回目の 1ch データ、サンプル 1 回目の 2ch データ・・・、サンプリング 2 回目の 1ch データ、サンプリング 2 回目の 2ch データ・・・、サンプリング 3 回目の・・・・サンプリング 4 回めの・・・サンプリング n 回目の・・・という配列になる。
 
 //listnum[makedata][変換データの生成]{
-Dim AoData(2000) As Single Dim AoSamplingTimes As Integer AoSamplingTimes = 1000 ’Generate AO data
+Dim AoData(2000) As Single 
+Dim AoSamplingTimes As Integer 
+AoSamplingTimes = 1000 ’Generate AO data
 Dim i As Short ’Sampling count Dim j As Short ’Ch
 Dim AoVolt As Single
 For i = 0 To AoSamplingTimes - 1
@@ -163,7 +166,7 @@ Protected Overrides Sub WndProc(ByRef m As System.Windows.Forms.Message)
     End Select
     MyBase.WndProc(m)
 End Sub
-}
+//}
 
 指定回数の DA 変換が終わったことを検知すれば、AO を再実施する。エラーを検知すれば、エラーで停止したことを示す。AO が終了した時には、出力が終了したことを検知する、という動作をする。
 
@@ -171,7 +174,7 @@ End Sub
 
 信号出力を停止する場合および終了時のコマンドについて記載する。停止はそのままの意味であるが、終了時には、きちんとデバイスを開放しないと、次回不具合が発生することがある。
 
-listnum[stop][DA停止、ボード停止]{
+//listnum[stop][DA停止、ボード停止]{
 Ret = AioStopAo(Id) ’DA Stop
 Ret = AioExit(Id) ’Exit device
 //}
@@ -218,7 +221,7 @@ For i = 0 To AoSamplingTimes - 1
     AoVolt = PPx * Sin(Xfreq * 2 * PI * i / AoSamplingTimes)
     AoData(i * AoChannels) = AoVolt
 Next i
-}
+//}
 
 周波数を変更すると、テーブルが書き換えられ、出力周波数が変更される。図4.4に1Hz と2Hzの出力例を示す。振幅、位相とも同じで、周波数の2倍異なる波形が出力されていることが確認で
 きる。
