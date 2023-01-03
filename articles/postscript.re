@@ -12,3 +12,8 @@
 
 親方＠親方Project　拝
 //}
+
+== 参考文献
+ * レーザー物理入門	霜田光一	岩波書店	1983
+ * QUANTUM ELECTRONICS Third Edition AMNON YARIV	WILEY	1988
+ * 絵解きでわかる自動制御	高橋寛	オーム社	2007
