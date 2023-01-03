@@ -26,6 +26,16 @@ log@<sub>{2}(1000)
 
 http://my-web-site.iobb.net/~yuki/2018-07/e-book/review-sup-sub/
 
+### なぜか画像が貼れない件。
+
+//embed{
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\linewidth]{images/chap1/img1.png}
+\caption{レーザーの模式図}
+\end{figure}
+//}
+
 ### 権利
 
 ベースには、[TechBooster/ReVIEW\-Template: TechBoosterで利用しているRe:VIEWのテンプレート（B5/A5/電子書籍）](https://github.com/TechBooster/ReVIEW-Template) を使っています。
