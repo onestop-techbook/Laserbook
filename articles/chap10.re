@@ -43,7 +43,7 @@ HaruLabさんのHP@<fn>{harulab}を見ながら実装を進める。まずはラ
 //embed{
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.5\linewidth]{images/chap9/image10-1.jpg}
+\includegraphics[width=0.5\linewidth]{images/chap10/image10-1.jpg}
 \caption{Arduinoを用いた液晶表示テスト}
 \end{figure}
 //}
@@ -198,7 +198,7 @@ void loop()
 //embed{
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.5\linewidth]{images/chap9/image10-2.png}
+\includegraphics[width=0.5\linewidth]{images/chap10/image10-2.jpg}
 \caption{Arduino時計の配線図(手書き)}
 \end{figure}
 //}
@@ -216,16 +216,16 @@ void loop()
 //embed{
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.5\linewidth]{images/chap9/image10-3.png}
-\caption{Arduino時計の配線図(手書き)}
+\includegraphics[width=0.5\linewidth]{images/chap10/image10-3.jpg}
+\caption{Arduino時計　表側}
 \end{figure}
 //}
 
 //embed{
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.5\linewidth]{images/chap9/image10-2.png}
-\caption{Arduino時計の配線図(手書き)}
+\includegraphics[width=0.5\linewidth]{images/chap10/image10-4.jpg}
+\caption{Arduino時計　裏側}
 \end{figure}
 //}
 
@@ -266,9 +266,7 @@ void loop()
 
 ==== Arduino 制御の外部 DA チップを使うデメリット
 
- * 追加の配線、追加部品が必要。
-
-配線があるということは、実装も大変だし、動作不良時の原因切り分けが大変。ライブラリ取り込みが必要で、DA チップごとに実装を変更する必要がある。
+ * 追加の配線、追加部品が必要。配線があるということは、実装も大変だし、動作不良時の原因切り分けが大変。ライブラリ取り込みが必要で、DA チップごとに実装を変更する必要がある。
 
  * ユニポーラのチップが多く、レベルシフトが必要。バイポーラの場合、両電源が必要な場合も多い。
 
@@ -294,8 +292,36 @@ analogWrite(9,128);
 //embed{
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.5\linewidth]{images/chap9/image10-2.png}
+\includegraphics[width=0.5\linewidth]{images/chap10/image10-5.png}
 \caption{ArduinoのPWM出力。引数128(Duty比50％)の波形}
 \end{figure}
 //}
-ArduinoのPWM出力。引数128(Duty比50％)の波形
+
+
+//embed{
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\linewidth]{images/chap10/image10-6.png}
+\caption{PWM出力波形の設定値とDuty比およびRMS値}
+\end{figure}
+//}
+
+次に、実際に平滑化したときにどうなるかについて試行する。PWM の平滑化にも幾つかの方法がある。最も簡単なのは抵抗R とコンデンサC を用いたCR ローパスフィルタを用いることである。CR ローパスフィルタのカットオフ周波数と振幅は以下の式で与えられる。
+
+//texequation{
+f_c=\frac{1}{2\pi c R}
+//}
+
+
+//texequation{
+|\frac{V_{out}}{V_{in}}|=\frac{1}{\sqrt{1+(\omega C R)^2}}
+//}
+
+
+C とR が大きいほどより平滑化されることがわかる。また、振幅はカットオフ周波数において1/√2すなわち-3dB となる。またカットオフ周波数以下で透過する振幅は入力信号のほぼ1 倍となり、カットオフ周波数以上では、同じ意味であるが、-6dB/oct あるいは-20dB/decとなる。周波数2 倍でゲインが1/2、1 桁上がる(=10 倍)で1/10となる。ただし、今回の目的はガルバノスキャナ制御用信号の生成であるから、あまり平滑化をし過ぎるとDC成分しか含まれない事になり、制御に使えなくなる。
+
+Arduino のPWM のキャリア周波数は490Hz なので、RC フィルタを組んでみる。使ったのは手元にあった1kΩと1uF である。適当に組み合わせて、フィルタを作ることを考えた。まずは、1kΩ、1uF を1 個づつ使ったフィルタのゲイン特性を見てみる。
+
+1kΩ、1uF を使った時のカットオフ周波数を計算すると159Hz となり、Arduino のPWM出力を平滑化できそうな事がわかる。最近はネット上にも便利なツールがたくさんあり、特性値を入力するだけで伝達関数を計算してカットオフ周波数Bode線図のグラフまで出力してくれるサイト@<fn>{keisan}がある。下の図は当該サイトで計算し、出力のボード線図を拝借したものである。縦軸が大きいのでわかりづらいが、100Hz   より少し上で落ち始め、その後-
+
+//footnote[keisan][http://sim.okawa-denshi.jp/CRtool.php CRローパス・フィルタ数計算ツール]
