@@ -322,6 +322,276 @@ C とR が大きいほどより平滑化されることがわかる。また、�
 
 Arduino のPWM のキャリア周波数は490Hz なので、RC フィルタを組んでみる。使ったのは手元にあった1kΩと1uF である。適当に組み合わせて、フィルタを作ることを考えた。まずは、1kΩ、1uF を1 個づつ使ったフィルタのゲイン特性を見てみる。
 
-1kΩ、1uF を使った時のカットオフ周波数を計算すると159Hz となり、Arduino のPWM出力を平滑化できそうな事がわかる。最近はネット上にも便利なツールがたくさんあり、特性値を入力するだけで伝達関数を計算してカットオフ周波数Bode線図のグラフまで出力してくれるサイト@<fn>{keisan}がある。下の図は当該サイトで計算し、出力のボード線図を拝借したものである。縦軸が大きいのでわかりづらいが、100Hz   より少し上で落ち始め、その後-
+1kΩ、1uF を使った時のカットオフ周波数を計算すると159Hz となり、Arduino のPWM出力を平滑化できそうな事がわかる。最近はネット上にも便利なツールがたくさんあり、特性値を入力するだけで伝達関数を計算してカットオフ周波数Bode線図のグラフまで出力してくれるサイト@<fn>{keisan}がある。下の図は当該サイトで計算し、出力のボード線図を拝借したものである。縦軸が大きいのでわかりづらいが、100Hzより少し上で落ち始め、その後-20dB/dec で落ちている事がわかる
 
 //footnote[keisan][http://sim.okawa-denshi.jp/CRtool.php CRローパス・フィルタ数計算ツール]
+
+
+//embed{
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\linewidth]{images/chap10/image10-7.png}
+\caption{RCフィルタのボード線図 R=1kΩ、C=1μF}
+\end{figure}
+//}
+
+//embed{
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\linewidth]{images/chap10/image10-8.png}
+\caption{RC フィルタ適用後の波形 fc=159Hz}
+\end{figure}
+//}
+
+//embed{
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\linewidth]{images/chap10/image10-9.png}
+\caption{RC フィルタ適用後の波形 fc=53Hz}
+\end{figure}
+//}
+
+
+図2-8に1kΩ、1uF を使ったカットオフ159Hzのフィルタを適用したDuty比50.2%の波形を入力してみたところを示す。
+
+電源電圧4.78Vに対し、平均値で2.41Vとほぼ半分、残っているゆらぎの成分は最大値3.56V、最小値1.24Vと2.32Vの振幅を持つことがわかった。流石にこの振幅は大きすぎるので、まずはコンデンサ容量を増やしてみる。1kΩと3uFを使うと、カットオフ周波数は 53Hzになる。その波形を図2-9に示す。平均値は変化せず2.41V、変動振幅は0.88Vまで低減した。また、5kΩ,3uF(カットオフ周波数=10.6Hz)では、変動の振幅は0.2V まで抑えられる。ただし、あまりカットオフを下げ過ぎると今度は通過させたい信号が低下する事になる。したがって、実信号で試す必要がある。
+
+//embed{
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\linewidth]{images/chap10/image10-10.jpg}
+\caption{RCフィルタの実装例とArduino基板}
+\end{figure}
+//}
+
+図2-10にRCフィルタの実装例を示す。アナログ出力を一旦ブレッドボードで受け、RCを適当に接続し、出力部分にプローブを接続する。特性確定するまでの試行であるから、暫定的なものである。
+
+ところで、フィルタに使うコンデンサって、アルミ電解コンデンサ使って問題なかったのだろうか。
+
+//embed{
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\linewidth]{images/chap10/image10-11.png}
+\caption{平滑化後の出力電圧とリップル fc=8.8Hz(R=6kΩ、C=3uF)}
+\end{figure}
+//}
+
+次に、手元にあった6kΩ(1kΩの抵抗と5kΩの可変抵抗)と3uF 分(1uF×3)のコンデンサを用いてカットオフ周波数を8.8Hzまで下げて、Duty 比と出力電圧および残リップルを調査した。ブレッドボードに回路を作り、オシロで出力信号振幅を調べる。結果を図2-11に示す。出力電圧は電源電圧である4.78V までリニアに増加するとともに、50%付近の残リップルが最も高いというリーズナブルな結果となった。Duty比50%で100mV 以上のリップルが残っているが、5Vフルスケールとすると、2%である。これがどの程度影響するか、あるいは、カットオフ8.8Hzで十分なのかは追って確認する。周波数特性を考える必要があるこういう用途が増えるなら、ネットワークアナライザーや、スペアナが欲しくなる。
+
+//embed{
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\linewidth]{images/chap10/image10-12.jpg}
+\caption{平滑化後の出力電圧とリップル fc=8.8Hz(R=6kΩ、C=3uF)}
+\end{figure}
+//}
+
+//embed{
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\linewidth]{images/chap10/image10-13.jpg}
+\caption{平滑化後の出力電圧とリップル fc=8.8Hz(R=6kΩ、C=3uF)}
+\end{figure}
+//}
+
+次に、RTC と液晶を載せたユニバーサル基板上にフィルタを実装する。回路図と実装状況を図2-12、図2-13 に示す。カットオフは一旦低周波側とし、5kΩ（金皮）、4.7uF（積層セラミックコンデンサ）を使った。
+
+次にArduino で時計を出力するために、アナログ出力部分のコーディングを行う。
+
+== Arduino 時計の実装
+過去、C84において、DAボードを使った時計を作った。それをArduinoに移植する。改めて、基本的な考え方と実装の詳細を示す。
+
+//embed{
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\linewidth]{images/chap10/image10-14.jpg}
+\caption{アナログ時計のイメージ}
+\end{figure}
+//}
+
+//listnum[codeArduinoClock][Arduinoを用いたアナログ時計実装例]{
+Rtc.available();
+int waittime = 100;
+double hour = 2*M_PI*30*Rtc.hours()/360; 
+int Xhour = int((sin(hour)*128+128)*0.5); 
+int Yhour = int((cos(hour)*128+128)*0.5);
+double min = 2*M_PI*30*Rtc.minutes()/360; 
+int Xmin = int((sin(min)*128+128)*0.8);
+int Ymin = int((cos(min)*128+128)*0.8;
+double second = 2*M_PI*30*Rtc.seconds()/360; 
+int Xsecond = int(sin(second)*128+128);
+int Ysecond = int(cos(second)*128+128);
+
+analogWrite(9,0); //X 軸原点 
+analogWrite(10,0); //Y 軸 
+delay(waittime); 
+analogWrite(9,Xhour); //X 軸hour 
+analogWrite(10,Yhour); //Y 軸 
+hour delay(waittime);
+analogWrite(9,0); //X 軸原点 
+analogWrite(10,0); //Y 軸 
+delay(waittime);
+analogWrite(9,Xmin); //X 軸min 
+analogWrite(10,Ymin); //Y 軸min 
+delay(waittime);
+analogWrite(9,0); //X 軸原点 
+analogWrite(10,0); //Y 軸 
+delay(waittime); 
+analogWrite(9,Xsecond); //X 軸second 
+analogWrite(10,Ysecond); //Y 軸second 
+delay(waittime);
+analogWrite(9,0); //X 軸 
+analogWrite(10,0); //Y 軸 
+delay(waittime);
+for (int i=0; i<13; i++){ 
+    analogWrite(9,int(sin(2*M_PI*30*i/360)*128+128));
+    analogWrite(10,int(cos(2*M_PI*30*i/360)*128+128));
+    delay(waittime);
+}
+//}
+
+描画の方針は以下の通り。
+
+ * 文字盤を示す点を12個と針を3本描画する。文字盤と針は順次描画し、残像を利用して全体を表示する。
+ * 1周の時間は積み上げで決定され、繰り返し周波数から決定するものとする。
+ * （とりあえずは）レベルシフトなく描画する、0V～5V(正確には 4.8V 程度)をフルスケールとする。
+ * レーザーの ON/OFF なし。
+
+これで、実装すると、@<list>{codeArduinoClock}のように実装できる。ベタうちなので、微妙・・・と思う人もいるかもしれないが、とりあえずのテストはこんな感じで実装し、様子を見ることにする。秒針は100%、分針は80%、時針は50%の長さとした。さて、このコードには、たくさんの間違い・バグがある。頭の体操を兼ねて、バグ取りの経緯を追ってみることにする。その前に、基本的な思想を確認しておく。
+
+まず Rtc.available();で RTC から時刻取得し、時、分、秒の各項目を抽出し、描画位置に変換する。X軸とY軸の出力はそれぞれ、取得した時刻を0時から始まる角度（ラジアン）に変換し、sinまたはcosをとり平面座標にとる。さらに128をかけて、128を加え、Intで丸めて整数値とし、Duty比として出力すべきアナログ値の引数とする。X軸Y軸のそれぞれの座標に対応するアナログ出力を analogWrite(ch,Duty)で設定し、アナログ出力を行う。delay(waittime)で一定時間を待ち、次の点にいく。時針、分針、秒針、文字盤の 12 個の点、と順々に描画する。
+
+X成分のアナログ出力波形を図10-15および図10-16に示す。手持ち素子の都合からRCフィルタの定数をそれぞれ5kΩ、4.7uFとし計算すると、カットオフ周波数は7.2Hzとなる。上段がPWMの生波形、下段が平滑化後の波形である。鈍らせすぎかな、と思うのが正直なところである。このあたりは試行錯誤で調整する必要がある。
+
+//embed{
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\linewidth]{images/chap10/image10-15.png}
+\caption{平滑化前後のX成分のアナログ出力 fc=7.2Hz(R=5kΩ、C=4.4uF)}
+\end{figure}
+//}
+
+//embed{
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\linewidth]{images/chap10/image10-16.png}
+\caption{平滑化後出力波形 2ch 併記 fc=7.2Hz(R=5kΩ、C=4.4uF)}
+\end{figure}
+//}
+
+//embed{
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\linewidth]{images/chap10/image10-17.png}
+\caption{リサージュ表示 fc=7.2Hz(R=5kΩ、C=4.4uF)}
+\end{figure}
+//}
+
+==== バグ1:値が飛ぶ(Dity 比設定のミスによる)
+出力設定値をint(sin(2*M_PI*30*i/360)*128+128)としたため、Duty比256 が入ってしまい、0に折り返されるため異常値となる。（範囲を超えても、コンパイラ上も動作上もエラーにならない。）
+
+図2-16に縦横2chそれぞれの波形を示す。ズレた V 字がふたつあり、ここが周りの文字盤のところと推測されるが、下のほうで V 字が途中で折れている事がわかる。針を表示して、一周回るコーディングになっているはずができてない。また、図 2-17 に示すリサージュ表示においても、0 時のところと 3 時のところに謎の V 字が存在する
+
+これは、@<list>{codeArduinoClock}でシフトのために+127にしようと言った尻から、+128と実装したミスによるもので、Duty=256=0となってしまったためである。そこで、+127に変更したところ、今度は6時と9時に-1が出てしまい、点対称な図形ができてしまった。面白いのは、Duty に-1を入れると、255相当に循環するというところか。
+ 
+これは、単純なバグではあるが、見た目上の影響は重要なバグである。そこで与える振幅を127とし、0～254の範囲とした。
+
+//embed{
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\linewidth]{images/chap10/image10-18.png}
+\caption{バグ 1修正後の平滑化波形 fc=7.2Hz(R=5kΩ、C=4.4uF), Delay=100ms}
+\end{figure}
+//}
+
+//embed{
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\linewidth]{images/chap10/image10-17.png}
+\caption{バグ 1修正後のリサージュ表示 fc=7.2Hz(R=5kΩ、C=4.4uF), Delay=100ms}
+\end{figure}
+//}
+
+バグ1 を修正したところで、あらためて平滑化後の生波形(図10-18)と、リサージュ(図10-19)を示す。オシロ上は意外ときれいな円になってるじゃないですか。
+
+==== バグ2:原点位置がおかしい。
+続いてバグ2を発見。時計の針の原点が左隅になっている。
+
+原点を Code6 のように与えているためである。
+
+そう、原点は、127、127である。
+そこで、原点部分を修正する。
+
+//listnum[codeClockOrigin][原点指定についてのバグ]{
+//間違い
+analogWrite(9,0);	//X 軸原点 
+analogWrite(10,0); //Y 軸 
+delay(waittime);
+//修正
+analogWrite(9,127);	//X 軸原点 
+analogWrite(10,127); //Y 軸 
+delay(waittime);
+//}
+
+修正後の挙動を確認したところ、一見問題ないが、秒針の挙動ががおかしい。時計回りの方向、時針、分針は問題ないのだが、なぜか 10 秒毎に秒針がジャンプするという問題が発生した。
+
+==== バグ3:針がジャンプする
+原因は、Rtc.Available（）で取得した時刻はBCD（Binary Code Decimal：二進化十進数）であり、そのまま位置座標用に代入するとバグるという点にある。
+
+気づく過程として、以下の試行錯誤を経た。
+
+ 1. まず、取得している RTC をそのまま液晶に表示させてみた。
+
+lcd.print(Rtc.seconds(), HEX);
+当然そのまま表示される。
+
+ 2. なぜ HEX？と思いつく。 lcd.print(Rtc.seconds(), DEC）; と変更し 10 進数表示にしてみる。
+
+0～9 は良いが、10 を表示すべきところで 16 にジャンプすることがわかった。この挙動は、オシロで表示した時にジャンプする挙動に一致する。
+
+ 3. RTC の説明サイトをいくつか回る。結果、実装のネタ元@<fn>{netamoto}の下のほうに、 @<em>{RTCはBCD形式で値を返す}という記述があったので、10 進数にするには Rtc.seconds(RTC8564::Decimal)とする必要があることがわかった。これで、10 進数でデータを取得することができ、そのままその後の計算に使うことができる。
+
+//footnote[netamoto][http://arms22.blog91.fc2.com/?tag=RTC 何でも作っちゃうかも （2016.08.12 閲覧）]
+
+//listnum[bcdcode][RTCの数値の問題部のコード]{
+lcd.print(Rtc.seconds(), HEX);  //OK
+lcd.print(Rtc.seconds(), DEC);  //NG
+second = Rtc.seconds(RTC8564::Decimal);	//OK
+second = Rtc.seconds();                 //NG
+//}
+
+//table[bcdtodec][BCDと10進数の関係]{
+値	BCD	BCD→DEC	値	BCD	BCD→DEC
+--------------------------
+0	0000	0	10	0001 0000	16
+1	0001	1	11	0001 0001	17
+2	0010	2	12	0001 0010	18
+3	0011	3	中略		
+4	0100	4	19	0001 1001	25
+5	0101	5	20	0010 0000	32
+6	0110	6	30	0011 0000	48
+7	0111	7	40	0100 0000	64
+8	1000	8	50	0101 0000	80
+9	1001	9	59	0101 1001	89
+//}
+
+なお、BCD 形式を 2 進数として読み取り 10 進数に変換すると、表 1 のようになり、値のジャンプの状態、挙動とも一致する。なるほどなるほど。今回は初めて BCD なるものを知ったので前回の本の入稿までには上記バグが取れず、前回の本文にはバグがあったままであったが、今回、エラッタを兼ねてここに記載する。結果としてこの問題が解決し、オシロ上は正確な時計が描かれるようになった。
+
+==== PWMの周波数について
+バグというわけではないが、併せて、PWM 周波数について新たな情報を得たので記載する。
+
+ここまで、アナログ出力はPWMの標準的出力端子である9、10 ピンを使った。サンプル例も多いのでそのまま実装したが、そのキャリア周波数は 490Hz であった。ネット上の実装例の情報@<fn>{freq}によれば、PWM 周波数は可変であり、また出力ピンによって異なることが示されている。具体的には 5,6 ピンのキャリア周波数は 976Hz でありそれ以外のピン（9,10,3番、11番）が490Hzとなる。さらには PWM 周波数の変更まで可能であり、CPU クロックに分周比を変更することにより行う。とりあえずは 5.6 ピンに変更しておよそ 2 倍の周波数とした。
+
+//footnote[freq][日々 ほげほげ 研究所 Arduino	PWM 周波数の高周波化https://theoriesblog.blogspot.jp/2014/05/arduino-pwm.html（2016.08.12 閲覧）]
+
+針のジャンプの問題が解決し、PWM 周波数を上げたところでいよいよ描画を行ってみる。実験に利用するのはいつもの構成である。すのこタンに設置した自作水冷付きのレーザー  モジュールとガルバノスキャナで行う。入力信号はArduino 時計の出力である。
+とここで、入力信号用のケーブルが短くて（現状約 15 ㎝）取り回しが悪いことに気付いた。動作チェックの前にこっちを何とかする。準備したもの。
+
+ * JST  XH コネクタ 2.5 ㎜ピッチ 3 ピン用 20 円19
+ * JST  XH コネクタ用コンタクト 100 個入り 800 円
+ * 精密圧着ペンチ エンジニア PA-09  3063 円@Amazon
+ * 10 芯すだれケーブル 1m  150 円（のうち 3 本を取り出して使う）
+
+//footnote[jhcon][千石ネット通販 電子工作部品 > コネクタ・端子 > 小信号用 圧着・圧接コネクタ > JST XH(2.5mm ピッチ) https://www.sengoku.co.jp/mod/sgk_cart/search.php?cid=3378  (2016.11.28 閲覧)]
+
+これで、入力信号用のケーブルを作る。50cmくらいに切って両端にコネクタをつける。 Arduino時計の基板の方には、平滑化後の出力付近に 3本のピンヘッダを立てこのコネクタを取り付ける部分とする。精密圧着ペンチ便利。ちゃんと専用のツール使うこと重要。いろいろ使えるので、やっぱり使いやすいツールを買うこと、超重要。あと欲しいツールとしては、よく切れるニッパーと、細めのラジペン、ピンセット、あとはワイヤストリッパーかな・・・メモメモ。
