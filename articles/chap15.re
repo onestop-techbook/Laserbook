@@ -108,6 +108,13 @@ V_{out}=1+\frac{R_2}{R_1}V_{in}
 
 次に、この回路図をそのままコピーして、2ch目用の回路図を引く。そして、アノテーションを行い、ERCチェックをかける。その結果、パワーフラグを立てた4カ所でエラーが発生した。2ch側のパワーフラグをすべて削除すると、パワーフラグは消える。
 
+//embed{
+\begin{figure}[h]
+\centering
+\includegraphics[width=1.0\linewidth]{images/chap15/image15-5.png}
+\caption{2chアンプの回路図}
+\end{figure}
+//}
 
 //embed{
 \begin{figure}[h]
@@ -121,13 +128,7 @@ V_{out}=1+\frac{R_2}{R_1}V_{in}
 
 こんな感じで、とりあえず、アンプ部分は完成したことになる。出力は3芯フラットケーブルでガルバノの制御ボードに入力するので、CONN_01X03で取り出せばよい(図15.6では1×2になっているが、追って修正する)
 
-//embed{
-\begin{figure}[h]
-\centering
-\includegraphics[width=1.0\linewidth]{images/chap15/image15-5.png}
-\caption{2chアンプの回路図}
-\end{figure}
-//}
+
 
 == 電源部分の設計・実装
 次に、電源部分を実装する。今回使うのは、ワンチップの昇圧DC-DCモジュール A0515S-2Wである。詳細は既刊@<fn>{56}に記載している。価格はAliexpress等で1個300円くらい、Aitendoで750円である。このデバイスはコンポーネントライブラリ内には存在しないので新規に登録する。手順はトラ技の記事@<fn>{57}等に公開されているのでそれを参考にする。
