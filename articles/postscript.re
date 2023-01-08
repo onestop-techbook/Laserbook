@@ -20,3 +20,4 @@
  *  ”Arduino で計る,測る,量る” 神崎康宏 CQ 出版社 2012
  * ボクの Arduino 工作ノート 改訂版 鈴木哲哉 ラトルズ 2014
  * 水冷PC読本1～8	UNT2works https://www.oliospec.com/shopdetail/000000003351/
+ * すぐに使えるオペアンプ回路図100	富田豊 丸善株式会社(2006)
