@@ -19,3 +19,4 @@
  * 絵解きでわかる自動制御	高橋寛	オーム社	2007
  *  ”Arduino で計る,測る,量る” 神崎康宏 CQ 出版社 2012
  * ボクの Arduino 工作ノート 改訂版 鈴木哲哉 ラトルズ 2014
+ * 水冷PC読本1～8	UNT2works https://www.oliospec.com/shopdetail/000000003351/
