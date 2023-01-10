@@ -183,7 +183,7 @@ Arduino等を用いたリアルタイムデータ生成
 
 後半の内容
 
- * Arduin o(ArduinoUno および ESP32) の実装
+ * Arduino(ArduinoUno および ESP32) の実装
  * アナログ出力の基礎(PWM および DAC)
  * アナログ時計の実装
  * 液晶の実装
