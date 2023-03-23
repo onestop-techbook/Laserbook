@@ -39,6 +39,19 @@
 
 == 表紙イラスト担当
 
-いたら。
+　
+//embed{
+    \begin{minipage}{.1\linewidth}
+        \centering
+        \includegraphics[width=.75\linewidth]{images/contributors/tokage.jpg}
+    \end{minipage}
+    \begin{minipage}{.89\linewidth}
+        トカゲ @Hiro\_Sauria https://twitter.com/Hiro\_Sauria\\
+        サークル名：冬眠ホタル
+        \end{minipage}
+    \hspace{1ex}
+//}
+表紙イラスト・デザインを担当させていただきましたトカゲです。普段は民家に住み、有機物を食べながら慎ましく暮らしてます。今回、親方Project様オリジナルキャラクターのワンストップちゃん（かわいい）を公式依頼で描けたのは、今生で一番うれし〜出来事です！！来世でも描きたいですね。
+
 
 #@#改行されない，hspace効かない，@<br>{}ではエラーがでるので，全角スペースで空の行を入れている

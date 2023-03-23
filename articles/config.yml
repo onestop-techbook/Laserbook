@@ -27,7 +27,7 @@ booktitle: レーザー本総集編
 
 # 著者名。「, 」で区切って複数指定できる
 # 読みを入れる例 aut: [{name: "青木峰郎", file-as: "アオキミネロウ"}, {name: "武藤健志", file-as: "ムトウケンシ"}, {name: "高橋征義", file-as: "タカハシマサヨシ"}, {name: "角征典", file-as: "カドマサノリ"}]
-# edt: ["親方Project"]
+aut: [親方@oyakata2438 oyakata2438@gmail.com]
 
 # 以下はオプション
 # 以下はオプション(autと同じように配列書式で複数指定可能)。
@@ -60,7 +60,7 @@ edt: 親方Project
 # a-pbl, pbl: 出版社（発行所）
 pbl: 親方Project
 # a-prt, prt: 印刷所
-prt: K-9(ケーナイン)
+prt: 栄光
 # prt: TechBooster
 # a-red, red: 項目の枠組起草者
 # a-rev, rev: 評論者
@@ -75,7 +75,7 @@ date: 2023-04-01
 # 複数指定する場合は次のように記述する
 # [["初版第1刷の日付", "初版第2刷の日付"], ["第2版第1刷の日付"]]
 # 日付の後ろを空白文字で区切り、任意の文字列を置くことも可能。
-history: [["2023年4月 OSC-Tokyo"]]
+history: [["2023年4月1日"]]
 # 権利表記(配列で複数指定可)
 # rights: (C) 2016 Re:VIEW Developers
 rights: (C) 2023　親方Project
